@@ -158,12 +158,6 @@ const ART = {
   rule(R) {
     return svg(240, 30, '<path d="M20 15H102M138 15H220" stroke="#b8935a" stroke-width=".8"/>' + at(106, 15, 200, spray(R, 22, .1)) + at(134, 15, -20, spray(R, 22, -.1)) + bloom(R, 120, 15, 1.3));
   },
-  // Short swaying strands hanging from a section's top edge.
-  fringe(R) {
-    let g = '';
-    for (let x = 12; x < 400; x += 26 + R() * 16) g += `<g transform="translate(${n1(x)} 0)"><g class="sway" style="--t:${n1(4 + R() * 3)}s;--d:${n1(-R() * 5)}s">${at(0, 0, 90 + R() * 10 - 5, spray(R, 20 + R() * 40, R() * .2 - .1))}</g></g>`;
-    return svg(400, 70, g);
-  },
   // Greenery tucked under the wax seal.
   tuck(R) {
     return svg(190, 60, at(88, 30, 190, spray(R, 78, .08)) + at(102, 30, -10, spray(R, 78, -.08)));
@@ -326,13 +320,25 @@ function openSound() {
 // --h fades the pinned hero as the page covers it; side branches drift at their own speed
 // (data-par); the venue card and the timeline lines grow as they enter (--p).
 {
-  const hero = $('.hero'), branches = $$('[data-par]');
+  const hero = $('.hero'), branches = $$('[data-par]'), cards = $$('.page > section, .page > footer');
+  // A card taller than the screen scrolls until its lower edge shows, then pins there.
+  // The RSVP card is left unpinned so the footer never covers its send button.
+  const pin = () => cards.forEach(el => { if (!el.matches('.rsvp, footer')) el.style.top = `${Math.min(0, innerHeight - el.offsetHeight)}px`; });
+  const sizes = new ResizeObserver(pin);
+  cards.forEach(el => sizes.observe(el));
+  addEventListener('resize', pin);
   let queued = false;
   const update = () => {
     queued = false;
     const vh = innerHeight, h = Math.min(1, scrollY / vh);
     hero.style.setProperty('--h', h.toFixed(3));
     hero.classList.toggle('away', h === 1); // covered: pause its animations
+    cards.forEach((el, i) => {
+      const next = cards[i + 1], r = el.getBoundingClientRect();
+      if (!i || !next || next.matches('footer') || r.bottom < 0 || r.top > vh) return;
+      const covered = (r.bottom - next.getBoundingClientRect().top) / Math.min(r.height, vh);
+      el.style.setProperty('--c', Math.max(0, Math.min(1, covered)).toFixed(3));
+    });
     for (const el of branches) {
       const r = el.parentElement.getBoundingClientRect();
       if (r.bottom > -vh && r.top < 2 * vh) el.style.translate = `0 ${((r.top - vh / 2) / vh * el.dataset.par * 120).toFixed(1)}px`;
