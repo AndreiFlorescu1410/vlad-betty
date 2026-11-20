@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body class="locked">
 
@@ -93,7 +93,9 @@
   </section>
 
   <section class="venue-wrap">
-    <div class="venue reveal">
+    <img class="edge l" data-par="-.3" src="assets/edge-dogwood.webp" alt="" loading="lazy">
+    <img class="edge r" data-par=".45" src="assets/edge-blackberry.webp" alt="" loading="lazy">
+    <div class="venue reveal" data-grow>
       <div class="art sprig" data-art="stem"></div>
       <h2 class="script" data-i18n="venueTitle"></h2>
       <p class="caps sub" data-i18n="venueSub"></p>
@@ -114,6 +116,8 @@
   </section>
 
   <section class="story">
+    <div class="art fringe" data-art="fringe"></div>
+    <img class="edge r" data-par=".4" src="assets/edge-berries.webp" alt="" loading="lazy">
     <h2 class="script reveal" data-i18n="storyTitle"></h2>
     <p class="caps sub reveal" data-i18n="storySub"></p>
     <ol id="story"></ol>
@@ -126,6 +130,7 @@
   </section>
 
   <section class="rsvp">
+    <img class="edge l" data-par="-.35" src="assets/edge-trillium.webp" alt="" loading="lazy">
     <div class="art rule reveal" data-art="rule"></div>
     <h2 class="script reveal" data-i18n="rsvpTitle"></h2>
     <p class="caps sub reveal" data-rsvp-by></p>
@@ -155,6 +160,6 @@
   </footer>
 </main>
 
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>

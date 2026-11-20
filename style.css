@@ -38,6 +38,7 @@ img { display: block; }
   margin: 0 auto;
   background: var(--paper) var(--noise);
   box-shadow: 0 0 60px rgba(47, 61, 36, .22);
+  overflow-x: hidden; /* fallback for browsers without clip */
   overflow-x: clip;
   text-align: center;
 }
@@ -84,7 +85,8 @@ img { display: block; }
   transition: transform 1s cubic-bezier(.6, 0, .3, 1) .35s, z-index 0s .85s;
 }
 .env-flap > * { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.env-flap .back { transform: rotateX(180deg); clip-path: polygon(0 0, 100% 0, 50% 100%); background: var(--forest) var(--sprigs); }
+/* Seen once the flap has flipped up: its point must sit at the top of this face. */
+.env-flap .back { transform: rotateX(180deg); clip-path: polygon(0 100%, 100% 100%, 50% 0); background: var(--forest) var(--sprigs); }
 .seal-sprig { z-index: 4; left: 50%; top: 54%; width: 190px; translate: -50% -50%; transition: opacity .4s; }
 .seal { z-index: 5; left: 50%; top: 54%; width: 92px; aspect-ratio: 1; translate: -50% -50%; animation: pulse 2.6s ease-in-out infinite; }
 .seal svg { position: absolute; inset: -8%; width: 116%; height: 116%; transition: transform .7s cubic-bezier(.5, 0, .9, .5), opacity .5s ease .25s; }
@@ -112,7 +114,13 @@ img { display: block; }
 .fab[aria-pressed="true"] .off, .fab[aria-pressed="false"] .on { display: none; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; height: 100svh; min-height: 36rem; display: grid; place-items: center; overflow: clip; }
+/* The hero stays pinned while the rest of the page slides over it. --h (0 to 1, set on scroll)
+   is how far it has been scrolled away: the flowers drift apart and the card fades back. */
+.hero { position: sticky; top: 0; z-index: 0; height: 100svh; min-height: 36rem; display: grid; place-items: center; overflow: hidden; overflow: clip; }
+.hero .canopy { transform-origin: top; scale: calc(1 + var(--h, 0) * .14); }
+.hero-arch, .hero-text { translate: 0 calc(var(--h, 0) * -60px); opacity: calc(1 - var(--h, 0) * 1.3); }
+.corner.l { translate: calc(var(--h, 0) * -45px) calc(var(--h, 0) * 30px); }
+.corner.r { translate: calc(var(--h, 0) * 45px) calc(var(--h, 0) * 30px); }
 .backdrop { position: absolute; top: 0; left: 0; width: 100%; opacity: .55; }
 .tendrils { position: absolute; top: 0; left: 0; width: 100%; }
 .sway { animation: sway var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate; }
@@ -150,6 +158,16 @@ img { display: block; }
 
 /* ---------- Sections ---------- */
 section { position: relative; padding: 3.5rem 1.5rem; }
+.page > section:not(.hero) { z-index: 1; background: var(--paper) var(--noise); }
+.page > section.countdown { border-radius: 1.75rem 1.75rem 0 0; box-shadow: 0 -14px 36px rgba(47, 61, 36, .16); }
+/* Watercolour branches at the page edges; their drift is set on scroll from data-par. */
+.edge { position: absolute; width: 40%; pointer-events: none; will-change: translate; }
+.edge.l { left: -10%; }
+.edge.r { right: -10%; }
+.venue-wrap .edge.l { top: -2rem; }
+.venue-wrap .edge.r { top: 1.5rem; width: 36%; }
+.story .edge { top: -4.5rem; width: 36%; }
+.rsvp .edge { top: -5rem; width: 36%; }
 h2.script { color: var(--forest); font-size: clamp(2.5rem, 12vw, 3.3rem); line-height: 1.15; }
 .sub { color: var(--muted); margin-top: .75rem; }
 .rule { width: 70%; margin: 0 auto 2.25rem; }
@@ -164,7 +182,7 @@ h2.script { color: var(--forest); font-size: clamp(2.5rem, 12vw, 3.3rem); line-h
 @keyframes tick { from { opacity: .2; transform: translateY(-6px); } }
 
 .venue-wrap { padding: 1rem 1.25rem 3.5rem; }
-.venue { position: relative; background: linear-gradient(var(--forest-hi), var(--forest)); color: var(--card); border-radius: 15rem 15rem 1rem 1rem; padding: 4.5rem 1.5rem 2.75rem; }
+.venue { position: relative; z-index: 1; scale: calc(.92 + var(--p, 1) * .08); background: linear-gradient(var(--forest-hi), var(--forest)); color: var(--card); border-radius: 15rem 15rem 1rem 1rem; padding: 4.5rem 1.5rem 2.75rem; }
 .venue::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--noise); opacity: .5; pointer-events: none; }
 .venue::after { content: ""; position: absolute; inset: 9px; border: 1px solid rgba(250, 246, 237, .28); border-radius: 15rem 15rem .6rem .6rem; pointer-events: none; }
 .venue > * { position: relative; }
@@ -181,14 +199,15 @@ h2.script { color: var(--forest); font-size: clamp(2.5rem, 12vw, 3.3rem); line-h
 #schedule { margin: 3rem auto 0; max-width: 22rem; text-align: left; }
 #schedule li { position: relative; display: grid; grid-template-columns: 4.6rem 1fr; gap: 3rem; padding-bottom: 2.75rem; }
 #schedule li::before { content: ""; position: absolute; left: 5.9rem; top: .55rem; width: .6rem; height: .6rem; border-radius: 50%; background: var(--forest); box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px rgba(184, 147, 90, .6); }
-#schedule li::after { content: ""; position: absolute; left: calc(6.2rem - .5px); top: 1.6rem; bottom: .1rem; width: 1px; background: rgba(125, 120, 98, .5); }
+#schedule li::after { content: ""; position: absolute; left: calc(6.2rem - .5px); top: 1.6rem; bottom: .1rem; width: 1px; background: rgba(125, 120, 98, .5); transform-origin: top; transform: scaleY(var(--p, 1)); }
 #schedule li:last-child { padding-bottom: 0; }
 #schedule li:last-child::after { display: none; }
 #schedule time { font-size: 1.5rem; text-align: right; font-variant-numeric: lining-nums tabular-nums; }
 #schedule h3, #story h3 { font: inherit; text-transform: uppercase; letter-spacing: .28em; font-size: .78rem; padding-top: .45rem; }
 #schedule p, #story p { font-style: italic; color: var(--muted); margin-top: .5rem; }
 
-.story { background: var(--band); padding: 3rem 1.5rem; }
+.page > section.story { background: var(--band); padding: 5rem 1.5rem 3rem; }
+.fringe { position: absolute; top: 0; left: 0; width: 100%; }
 #story { margin-top: 2.5rem; display: grid; gap: 2.75rem; }
 #story li { position: relative; }
 #story li + li::before { content: ""; position: absolute; left: 50%; top: -2.1rem; height: 1.5rem; width: 1px; background: var(--gold); }
@@ -229,4 +248,6 @@ footer a { display: inline-block; margin-top: .75rem; color: var(--card); font-s
   *, *::before, *::after { animation: none !important; transition-duration: .01s !important; transition-delay: 0s !important; }
   .h-in, .reveal { opacity: 1; transform: none; }
   #leaves { display: none !important; }
+  .hero .canopy, .hero-arch, .hero-text, .corner, .edge { translate: none !important; }
+  .hero-arch, .hero-text { opacity: 1 !important; }
 }

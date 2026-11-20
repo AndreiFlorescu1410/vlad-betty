@@ -158,6 +158,12 @@ const ART = {
   rule(R) {
     return svg(240, 30, '<path d="M20 15H102M138 15H220" stroke="#b8935a" stroke-width=".8"/>' + at(106, 15, 200, spray(R, 22, .1)) + at(134, 15, -20, spray(R, 22, -.1)) + bloom(R, 120, 15, 1.3));
   },
+  // Short swaying strands hanging from a section's top edge.
+  fringe(R) {
+    let g = '';
+    for (let x = 12; x < 400; x += 26 + R() * 16) g += `<g transform="translate(${n1(x)} 0)"><g class="sway" style="--t:${n1(4 + R() * 3)}s;--d:${n1(-R() * 5)}s">${at(0, 0, 90 + R() * 10 - 5, spray(R, 20 + R() * 40, R() * .2 - .1))}</g></g>`;
+    return svg(400, 70, g);
+  },
   // Greenery tucked under the wax seal.
   tuck(R) {
     return svg(190, 60, at(88, 30, 190, spray(R, 78, .08)) + at(102, 30, -10, spray(R, 78, -.08)));
@@ -191,7 +197,6 @@ $('#seal').innerHTML = seal('l') + seal('r');
   const R = rng(42);
   $('#leaves').innerHTML = ['#8a9a6b', '#4f5e34', '#fffdf6', '#a56e37', '#fffdf6', '#8a9a6b'].map(c =>
     `<div class="leaf" style="--x:${n1(R() < .5 ? R() * 7 : 90 + R() * 6)}%;--s:${n1(11 + R() * 9)}px;--t:${n1(12 + R() * 9)}s;--d:${n1(-R() * 20)}s"><svg viewBox="-2 -8 24 16"><path d="${leaf(20, 6.5)}" fill="${c}" stroke="#d6cbb2" stroke-width=".5" opacity=".9"/></svg></div>`).join('');
-  new IntersectionObserver(([e]) => $('.hero').classList.toggle('away', !e.isIntersecting)).observe($('.hero'));
 }
 
 // ---------- Text ----------
@@ -315,6 +320,30 @@ function openSound() {
     o.connect(g).connect(ac.destination); o.start(now + 1.3 + i * .14); o.stop(now + 3.6 + i * .14);
   });
   setTimeout(() => ac.close(), 5000);
+}
+
+// ---------- Scroll-linked motion ----------
+// --h fades the pinned hero as the page covers it; side branches drift at their own speed
+// (data-par); the venue card and the timeline lines grow as they enter (--p).
+{
+  const hero = $('.hero'), branches = $$('[data-par]');
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const vh = innerHeight, h = Math.min(1, scrollY / vh);
+    hero.style.setProperty('--h', h.toFixed(3));
+    hero.classList.toggle('away', h === 1); // covered: pause its animations
+    for (const el of branches) {
+      const r = el.parentElement.getBoundingClientRect();
+      if (r.bottom > -vh && r.top < 2 * vh) el.style.translate = `0 ${((r.top - vh / 2) / vh * el.dataset.par * 120).toFixed(1)}px`;
+    }
+    for (const el of $$('[data-grow], #schedule li')) {
+      const p = (vh * .9 - el.getBoundingClientRect().top) / (vh * .5);
+      el.style.setProperty('--p', Math.max(0, Math.min(1, p)).toFixed(3));
+    }
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
 }
 
 // ---------- Opening ----------
