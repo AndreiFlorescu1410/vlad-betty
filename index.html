@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vlad &amp; Betty — Invitație de nuntă</title>
+<meta name="description" content="Vă invităm la nunta noastră!">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f5f0e6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%232f3d24'/%3E%3Ccircle cx='16' cy='16' r='10.5' fill='none' stroke='%23d9c08a'/%3E%3C/svg%3E">
+<link rel="preload" as="image" href="assets/canopy.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap">
+<link rel="stylesheet" href="style.css?v=2">
+</head>
+<body class="locked">
+
+<!-- Entry: sealed envelope under the canopy. Tap anywhere to open. -->
+<div id="envelope" role="button" tabindex="0">
+  <div class="env-col"><img class="canopy" src="assets/canopy.webp" alt=""></div>
+  <div class="env-stage">
+    <div class="env-shell">
+      <div class="env-liner"></div>
+      <div class="env-card"><span class="script">V <i>&amp;</i> B</span><small class="caps" data-date></small></div>
+      <svg class="env-pocket" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#fbf8f1"/><stop offset="1" stop-color="#ece5d6"/></linearGradient>
+          <linearGradient id="gr" x1="1" x2="0"><stop offset="0" stop-color="#fbf8f1"/><stop offset="1" stop-color="#eae3d3"/></linearGradient>
+          <linearGradient id="gb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fcf9f3"/><stop offset="1" stop-color="#f1eadc"/></linearGradient>
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
+        </defs>
+        <polygon points="0,0 50,54 0,100" fill="url(#gl)"/>
+        <polygon points="100,0 50,54 100,100" fill="url(#gr)"/>
+        <polygon points="0,100 50,54 100,100" fill="url(#gb)"/>
+        <polyline points="0,100 50,54 100,100" fill="none" stroke="#6b5230" stroke-opacity=".28" vector-effect="non-scaling-stroke"/>
+        <polyline points="0,100.8 50,54.8 100,100.8" fill="none" stroke="#fffdf6" stroke-opacity=".9" vector-effect="non-scaling-stroke"/>
+        <polyline class="flap-shadow" points="0,1 50,56 100,1" fill="none" stroke="#4a3a1c" stroke-opacity=".35" stroke-width="2.5" filter="url(#soft)"/>
+      </svg>
+      <div class="env-flap">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfaf4"/><stop offset="1" stop-color="#f3ecdf"/></linearGradient></defs>
+          <path d="M0 0H100L54 93Q50 100 46 93Z" fill="url(#gf)"/>
+          <path d="M0 0L46 93Q50 100 54 93L100 0" fill="none" stroke="#fffdf6" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="back"></div>
+      </div>
+      <div class="art seal-sprig" data-art="tuck"></div>
+      <div class="seal" id="seal"></div>
+    </div>
+    <p class="env-hint caps" data-i18n="tapSeal"></p>
+  </div>
+</div>
+
+<button class="lang caps" id="lang" type="button"></button>
+<button class="fab" id="music" type="button" aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M11 5 6 9H3v6h3l5 4z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m16 9 5 6m0-6-5 6"/>
+  </svg>
+</button>
+<audio id="bgm" src="assets/clair-de-lune.mp3" loop preload="none"></audio>
+
+<main class="page">
+  <section class="hero">
+    <div class="art backdrop" data-art="backdrop"></div>
+    <div class="art tendrils" data-art="tendrils"></div>
+    <div class="hero-arch"></div>
+    <img class="canopy" src="assets/canopy.webp" alt="">
+    <img class="corner l" src="assets/corner-dryad.webp" alt="">
+    <img class="corner r" src="assets/corner-snowberry.webp" alt="">
+    <div id="leaves" aria-hidden="true"></div>
+    <div class="hero-text">
+      <p class="caps h-in" style="--d:.2s" data-i18n="heroIntro"></p>
+      <h1 class="script names">
+        <span class="h-in" style="--d:.7s" data-name="0"></span>
+        <i class="h-in" style="--d:1.1s">&amp;</i>
+        <span class="h-in" style="--d:1.5s" data-name="1"></span>
+      </h1>
+      <p class="caps big h-in" style="--d:2.1s" data-date></p>
+      <p class="caps h-in" style="--d:2.4s" data-venue-short></p>
+    </div>
+  </section>
+
+  <section class="countdown">
+    <h2 class="script reveal" data-i18n="cdTitle"></h2>
+    <p class="caps sub reveal" data-i18n="cdSub"></p>
+    <div class="cd reveal">
+      <div><b data-cd="0">0</b><span class="caps" data-i18n="days"></span></div>
+      <div><b data-cd="1">00</b><span class="caps" data-i18n="hours"></span></div>
+      <div><b data-cd="2">00</b><span class="caps" data-i18n="minutes"></span></div>
+      <div><b data-cd="3">00</b><span class="caps" data-i18n="seconds"></span></div>
+    </div>
+  </section>
+
+  <section class="venue-wrap">
+    <div class="venue reveal">
+      <div class="art sprig" data-art="stem"></div>
+      <h2 class="script" data-i18n="venueTitle"></h2>
+      <p class="caps sub" data-i18n="venueSub"></p>
+      <h3 class="script" data-venue-name></h3>
+      <p data-venue-address></p>
+      <iframe id="map" title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="btns">
+        <button class="btn caps" id="ics" type="button" data-i18n="addCal"></button>
+        <a class="btn caps solid" id="dir" target="_blank" rel="noopener" data-i18n="directions"></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="schedule">
+    <h2 class="script reveal" data-i18n="dayTitle"></h2>
+    <p class="caps sub reveal" data-date></p>
+    <ol id="schedule"></ol>
+  </section>
+
+  <section class="story">
+    <h2 class="script reveal" data-i18n="storyTitle"></h2>
+    <p class="caps sub reveal" data-i18n="storySub"></p>
+    <ol id="story"></ol>
+  </section>
+
+  <section class="faq">
+    <h2 class="script reveal" data-i18n="faqTitle"></h2>
+    <p class="caps sub reveal" data-i18n="faqSub"></p>
+    <div id="faq" class="reveal"></div>
+  </section>
+
+  <section class="rsvp">
+    <div class="art rule reveal" data-art="rule"></div>
+    <h2 class="script reveal" data-i18n="rsvpTitle"></h2>
+    <p class="caps sub reveal" data-rsvp-by></p>
+    <form id="rsvp" class="reveal">
+      <label><span data-i18n="fName"></span><input name="name" required autocomplete="name"></label>
+      <label><span data-i18n="fEmail"></span><input name="email" type="email" required autocomplete="email"></label>
+      <fieldset>
+        <legend data-i18n="fAttend"></legend>
+        <label class="pill"><input type="radio" name="attending" value="yes" checked><span data-i18n="fYes"></span></label>
+        <label class="pill"><input type="radio" name="attending" value="no"><span data-i18n="fNo"></span></label>
+      </fieldset>
+      <div id="rsvp-yes">
+        <label><span data-i18n="fGuests"></span><input name="guests" type="number" min="1" max="20" value="1" inputmode="numeric"></label>
+        <label><span data-i18n="fDiet"></span><input name="dietary"></label>
+      </div>
+      <label><span data-i18n="fMsg"></span><textarea name="message" rows="3"></textarea></label>
+      <button class="btn caps solid" type="submit" data-i18n="fSend"></button>
+      <p id="rsvp-status" role="status"></p>
+    </form>
+  </section>
+
+  <footer>
+    <div class="art sprig" data-art="stem"></div>
+    <p class="caps" data-i18n="footQ"></p>
+    <a id="mail"></a>
+    <h2 class="script names small"><span data-name="0"></span> <i>&amp;</i> <span data-name="1"></span></h2>
+  </footer>
+</main>
+
+<script src="app.js?v=2"></script>
+</body>
+</html>
